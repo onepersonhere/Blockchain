@@ -1,12 +1,14 @@
 package blockchain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Random;
 
 import static java.lang.Math.random;
 
-public class Block {
-    private int id = Blockchain.id;
+public class Block implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public long timestamp = new Date().getTime();
     private long timeEnd;
     public double duration;
@@ -15,8 +17,9 @@ public class Block {
     public long magicNum = 0;
     public static int numOfZeroes = 3;
 
-    private String str = id + timestamp + prevHash;
-    public Block(){
+    private String str;
+    public Block(int id){
+        str = id + timestamp + prevHash;
         if(!str.equals("0")) {
             do{
                 magicNum = (long)(random() * 1000000000);

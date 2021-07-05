@@ -14,18 +14,7 @@ public class Main {
         Block.numOfZeroes = scanner.nextInt();
 
         Blockchain blockchain = new Blockchain();
-
-        try {
-            File myObj = new File(filename);
-            Scanner myReader = new Scanner(myObj);
-            if (myReader.hasNextLine()) {
-                blockchain = (Blockchain) FileSerial.read(filename);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        blockchain = ifFileEmpty(blockchain);
 
         for(int i = 0; i < 5; i++){
             blockchain.generateBlock();
@@ -33,5 +22,22 @@ public class Main {
         }
 
         System.out.println(blockchain.validate());
+    }
+
+    private static Blockchain ifFileEmpty(Blockchain blockchain){
+        try {
+            File myObj = new File(filename);
+            if (myObj.length() != 0) {
+                blockchain = (Blockchain) FileSerial.read(filename);
+            }else{
+                blockchain.id = 0;
+                blockchain.prevHash = "0";
+                //System.out.println("new Blockchain");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return blockchain;
     }
 }

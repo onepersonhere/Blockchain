@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Blockchain implements Serializable {
-    public static int id = 0;
-    private static String prevHash = "0";
-    private static List<Block> hashStorage = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
+
+    public int id = 0;
+    public String prevHash;
+    private List<Block> hashStorage = new ArrayList<>();
 
     public void generateBlock(){
         System.out.println("Block:");
@@ -17,7 +19,7 @@ public class Blockchain implements Serializable {
         //factors affecting the hash value
         System.out.println("Id: " + id);
 
-        Block blk = new Block();
+        Block blk = new Block(id);
 
         System.out.println("Timestamp: " + blk.timestamp);
         System.out.println("Magic number: " + blk.magicNum);
@@ -38,5 +40,12 @@ public class Blockchain implements Serializable {
             //System.out.println(hashStorage.get(i).getPrevHash() + " " + hashStorage.get(i-1).toString());
         }
         return true;
+    }
+
+    @Override
+    public String toString(){
+        String str = "last id: " + id + "\nprevHash: " + prevHash + "\n";
+        str += hashStorage.toString() + "\n";
+        return str;
     }
 }

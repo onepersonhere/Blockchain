@@ -361,6 +361,35 @@ files:
         }
     }
   learner_created: true
+- name: src/blockchain/bc.blockchain
+  visible: true
+  text: "��\0\x05sr\0\x15blockchain.Blockchain�C=�{��\x17\x02\0\0xp"
+  learner_created: true
+- name: src/blockchain/FileSerial.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.*;
+
+    public class FileSerial {
+        public static void write(Object obj, String fileName) throws IOException {
+            FileOutputStream fos = new FileOutputStream(fileName);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.close();
+        }
+        public static Object read(String fileName) throws IOException, ClassNotFoundException {
+            FileInputStream fis = new FileInputStream(fileName);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            Object obj = ois.readObject();
+            ois.close();
+            return obj;
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/50/stages/273/implement#comment
 status: Unchecked
 record: 3
