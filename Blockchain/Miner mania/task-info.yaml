@@ -235,6 +235,132 @@ files:
         }
     }
   learner_created: false
+- name: src/blockchain/StringUtil.java
+  visible: true
+  text: |-
+    package blockchain;
+
+    import java.security.MessageDigest;
+
+    class StringUtil {
+        /* Applies Sha256 to a string and returns a hash. */
+        public static String applySha256(String input){
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                /* Applies sha256 to our input */
+                byte[] hash = digest.digest(input.getBytes("UTF-8"));
+                StringBuilder hexString = new StringBuilder();
+                for (byte elem: hash) {
+                    String hex = Integer.toHexString(0xff & elem);
+                    if(hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+                return hexString.toString();
+            }
+            catch(Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+  learner_created: true
+- name: src/blockchain/Blockchain.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.util.ArrayList;
+    import java.util.Date;
+    import java.util.List;
+
+    public class Blockchain {
+        public static int id = 0;
+        private static String prevHash = "0";
+        private static List<Block> hashStorage = new ArrayList<>();
+
+        public static void generateBlock(){
+            System.out.println("Block:");
+            id++;
+
+            //factors affecting the hash value
+            System.out.println("Id: " + id);
+
+            Block blk = new Block();
+
+            System.out.println("Timestamp: " + blk.timestamp);
+            System.out.println("Magic number: " + blk.magicNum);
+            System.out.println("Hash of the previous block: \n" + prevHash);
+
+            blk.setPrevHash(prevHash);
+            System.out.println("Hash of the block: \n" + blk);
+
+            System.out.println("Block was generating for " + blk.duration + " seconds\n");
+            hashStorage.add(blk);
+            prevHash = blk.toString();
+        }
+        public static boolean validate(){
+            for(int i = id - 1; i >= 1; i--){
+                if(!hashStorage.get(i).getPrevHash().contains(hashStorage.get(i-1).toString())){
+                    return false;
+                }
+                //System.out.println(hashStorage.get(i).getPrevHash() + " " + hashStorage.get(i-1).toString());
+            }
+            return true;
+        }
+    }
+  learner_created: true
+- name: src/blockchain/Block.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.util.Date;
+    import java.util.Random;
+
+    import static java.lang.Math.random;
+
+    public class Block {
+        private int id = Blockchain.id;
+        public long timestamp = new Date().getTime();
+        private long timeEnd;
+        public double duration;
+        private String hash = "0";
+        private String prevHash = "";
+        public long magicNum = 0;
+        public static int numOfZeroes = 3;
+
+        private String str = id + timestamp + prevHash;
+        public Block(){
+            if(!str.equals("0")) {
+                do{
+                    magicNum = (long)(random() * 1000000000);
+                    hash = StringUtil.applySha256(str + magicNum);
+                }
+                while(hash.indexOf(createZeroStr()) != 0);
+            }
+            timeEnd = new Date().getTime();
+            duration = (double)(timeEnd - timestamp)/1000;
+        }
+        private String createZeroStr(){
+            String zeroes = "";
+            for(int i = 0; i < numOfZeroes; i++){
+                zeroes += "0";
+            }
+            return zeroes;
+        }
+        @Override
+        public String toString(){
+            return hash;
+        }
+
+        public void setPrevHash(String str) {
+            this.prevHash = str;
+        }
+
+        public String getPrevHash() {
+            return prevHash;
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/50/stages/273/implement#comment
 status: Unchecked
-record: -1
+record: 3
