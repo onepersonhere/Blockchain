@@ -9,13 +9,14 @@ import static java.lang.Math.random;
 public class Block implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static Blockchain blockchain = Main.blockchain; //ini blkchn
     public long timestamp = new Date().getTime();
     private long timeEnd;
     public double duration;
     private String hash = "0";
     private String prevHash = "";
     public long magicNum = 0;
-    public static int numOfZeroes = 0;
+    public static int numOfZeroes; //ini N
 
     private String str;
     public Block(int id) throws InterruptedException {

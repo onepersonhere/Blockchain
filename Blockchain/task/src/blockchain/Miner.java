@@ -36,7 +36,6 @@ public class Miner extends Thread {
 
         Block blk = new Block(blk_id); //block is already created from here
         blk.setPrevHash(prevHash);
-
         //System.out.println("size: "+blockchain.hashStorage.size() + " current id: " + (blk_id - 1));
 
         printBlock(blk_id, blk, prevHash, blockchain);
@@ -48,6 +47,7 @@ public class Miner extends Thread {
                 blockchain.setPrevHash(blk.toString());
                 blockchain.hashStorage.add(blk);
                 blockchain.setId(blk_id);
+
                 //System.out.println("id is "+blockchain.getId());
 
                 System.out.println("Block:");
@@ -58,18 +58,21 @@ public class Miner extends Thread {
                 System.out.println("Magic number: " + blk.magicNum);
                 System.out.println("Hash of the previous block: \n" + prevHash);
                 System.out.println("Hash of the block: \n" + blk);
+
+                //Block Data?
+
                 System.out.println("Block was generating for " + blk.duration + " seconds");
 
-                if(blk.duration < 5){
+                if(blk.duration < 0.25){
                     Block.numOfZeroes++;
                     System.out.println("N was increased to " + Block.numOfZeroes + "\n");
-                }else if(blk.duration >= 5 && blk.duration <= 60){
+                }else if(blk.duration >= 0.25 && blk.duration <= 60){
                     System.out.println("N stays the same\n");
                 }else {
                     Block.numOfZeroes--;
                     System.out.println("N was decreased by 1\n");
                 }
-
+                blockchain.setN(Block.numOfZeroes);
                 printing = false;
             } else {
                 //System.out.println("miner_"+miner_id+" is blocked");

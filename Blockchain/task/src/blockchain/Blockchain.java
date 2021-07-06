@@ -11,6 +11,7 @@ public class Blockchain implements Serializable {
     private int id = 0;
     private String prevHash;
     public List<Block> hashStorage = new ArrayList<>();
+    private int N = 0;
 
     public boolean validate(){
 
@@ -44,5 +45,13 @@ public class Blockchain implements Serializable {
 
     public void setPrevHash(String prevHash) {
         this.prevHash = prevHash;
+    }
+
+    public void setN(int n) {
+        N = n;
+    }
+
+    public int getN() {
+        return N;
     }
 }

@@ -1,9 +1,6 @@
 package blockchain;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Scanner;
 import java.io.File;
 
 public class Main {
@@ -12,11 +9,13 @@ public class Main {
     public static int finalSize;
     public static final String filename = "C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\bc.blockchain";
 
-
+    //while creating one block, message receive will be stored into the next block
     public static void main(String[] args) throws InterruptedException {
         blockchain = Main.ifFileEmpty(blockchain);
         size = blockchain.hashStorage.size();
         finalSize = size + 5;
+
+        Block.numOfZeroes = blockchain.getN(); //set N value
 
         for (int i = 0; i < 9; i++) { //amount of miners
             Miner miner = new Miner(i + 1);
