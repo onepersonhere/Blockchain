@@ -7,31 +7,34 @@ import java.util.Scanner;
 import java.io.File;
 
 public class Main {
-    private static final String filename = "C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\bc.blockchain";
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        System.out.println("Enter how many zeros the hash must start with: ");
-        Scanner scanner = new Scanner(System.in);
-        Block.numOfZeroes = scanner.nextInt();
+    public static Blockchain blockchain = new Blockchain();
+    public static int size;
+    public static int finalSize;
+    public static final String filename = "C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\bc.blockchain";
 
-        Blockchain blockchain = new Blockchain();
-        blockchain = ifFileEmpty(blockchain);
 
-        for(int i = 0; i < 5; i++){
-            blockchain.generateBlock();
-            FileSerial.write(blockchain, filename);
+    public static void main(String[] args) throws InterruptedException {
+        blockchain = Main.ifFileEmpty(blockchain);
+        size = blockchain.hashStorage.size();
+        finalSize = size + 5;
+
+        for (int i = 0; i < 9; i++) { //amount of miners
+            Miner miner = new Miner(i + 1);
+            miner.setName("miner_" + (i + 1));
+            miner.start();
         }
 
-        System.out.println(blockchain.validate());
+        Thread.sleep(5000);
     }
 
-    private static Blockchain ifFileEmpty(Blockchain blockchain){
+    public static Blockchain ifFileEmpty(Blockchain blockchain){
         try {
             File myObj = new File(filename);
             if (myObj.length() != 0) {
                 blockchain = (Blockchain) FileSerial.read(filename);
             }else{
-                blockchain.id = 0;
-                blockchain.prevHash = "0";
+                blockchain.setId(0);
+                blockchain.setPrevHash("0");
                 //System.out.println("new Blockchain");
             }
         } catch (IOException | ClassNotFoundException e) {

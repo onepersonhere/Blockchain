@@ -15,10 +15,10 @@ public class Block implements Serializable {
     private String hash = "0";
     private String prevHash = "";
     public long magicNum = 0;
-    public static int numOfZeroes = 3;
+    public static int numOfZeroes = 0;
 
     private String str;
-    public Block(int id){
+    public Block(int id) throws InterruptedException {
         str = id + timestamp + prevHash;
         if(!str.equals("0")) {
             do{
@@ -27,8 +27,9 @@ public class Block implements Serializable {
             }
             while(hash.indexOf(createZeroStr()) != 0);
         }
+
         timeEnd = new Date().getTime();
-        duration = (double)(timeEnd - timestamp)/1000;
+        duration = (double)(timeEnd - timestamp)/1000; // in seconds
     }
     private String createZeroStr(){
         String zeroes = "";
