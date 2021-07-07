@@ -76,10 +76,10 @@ public class Main {
                 //Block Data?
                 System.out.println("Block was generating for " + blk.duration + " seconds");
 
-                if(blk.duration < 0.25){
+                if(blk.duration < 0.01){
                     Block.numOfZeroes++;
                     System.out.println("N was increased to " + Block.numOfZeroes + "\n");
-                }else if(blk.duration >= 0.25 && blk.duration <= 60){
+                }else if(blk.duration >= 0.01 && blk.duration <= 5){
                     System.out.println("N stays the same\n");
                 }else {
                     Block.numOfZeroes--;

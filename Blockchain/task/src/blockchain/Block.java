@@ -31,7 +31,7 @@ public class Block implements Serializable {
             while(hash.indexOf(createZeroStr()) != 0);
         }
 
-        Thread.sleep(1000); //for testing inputs
+        //Thread.sleep(1000); //for testing inputs
         data = getdata();
         timeEnd = new Date().getTime();
         duration = (double)(timeEnd - timestamp)/1000; // in seconds

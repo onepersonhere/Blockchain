@@ -70,6 +70,5 @@ public class Blockchain implements Serializable {
     public void addData(String data){
         Blockchain.data.add(data);
         //System.out.println(this.data.toString());
-        //verdict: Not deleting correctly, must input to end.
     }
 }
