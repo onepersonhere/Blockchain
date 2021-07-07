@@ -2,6 +2,7 @@ package blockchain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.random;
@@ -17,6 +18,7 @@ public class Block implements Serializable {
     private String prevHash = "";
     public long magicNum = 0;
     public static int numOfZeroes; //ini N
+    private String data;
 
     private String str;
     public Block(int id) throws InterruptedException {
@@ -29,6 +31,8 @@ public class Block implements Serializable {
             while(hash.indexOf(createZeroStr()) != 0);
         }
 
+        Thread.sleep(1000); //for testing inputs
+        data = getdata();
         timeEnd = new Date().getTime();
         duration = (double)(timeEnd - timestamp)/1000; // in seconds
     }
@@ -51,4 +55,21 @@ public class Block implements Serializable {
     public String getPrevHash() {
         return prevHash;
     }
+
+    private String getdata(){
+        List<String> list = blockchain.getData();
+
+        String returnVal = "";
+        for(int i = 0; i < list.size(); i++){
+            returnVal += "\n" + list.get(i);
+        }
+        return returnVal;
+    }
+
+     public String getData(){
+        if(data.isEmpty()){
+            return "no messages";
+        }
+        return data;
+     }
 }

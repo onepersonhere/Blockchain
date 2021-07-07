@@ -13,6 +13,8 @@ public class Blockchain implements Serializable {
     public List<Block> hashStorage = new ArrayList<>();
     private int N = 0;
 
+    private static List<String> data = new ArrayList<>();
+
     public boolean validate(){
 
         for(int i = id - 1; i >= 1; i--){
@@ -53,5 +55,21 @@ public class Blockchain implements Serializable {
 
     public int getN() {
         return N;
+    }
+
+    public void setData(List<String> data) {
+        //System.out.println("data set to: "+data.toString());
+        Blockchain.data = data; //reset
+    }
+
+    public List<String> getData() {
+        //System.out.println(data.toString());
+        return data;
+    }
+
+    public void addData(String data){
+        Blockchain.data.add(data);
+        //System.out.println(this.data.toString());
+        //verdict: Not deleting correctly, must input to end.
     }
 }
