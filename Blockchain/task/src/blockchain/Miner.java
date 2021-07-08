@@ -26,7 +26,7 @@ public class Miner extends Thread {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }while(Main.blockchain.hashStorage.size() < Main.finalSize); //how many blocks you want
+        }while(Main.blockchain.blockStorage.size() < Main.finalSize); //how many blocks you want
     }
 
     private void generateBlock(int miner_id, Blockchain blockchain) throws InterruptedException {

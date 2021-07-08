@@ -1,7 +1,7 @@
 type: edu
 custom_name: stage4
 files:
-- name: src/blockchain/Main.java
+- name: src/blockchain/Run.java
   visible: true
   text: |
     package blockchain;

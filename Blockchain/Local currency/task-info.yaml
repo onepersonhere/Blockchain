@@ -245,6 +245,561 @@ files:
         }
     }
   learner_created: false
+- name: src/blockchain/StringUtil.java
+  visible: true
+  text: |-
+    package blockchain;
+
+    import java.security.MessageDigest;
+
+    class StringUtil {
+        /* Applies Sha256 to a string and returns a hash. */
+        public static String applySha256(String input){
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                /* Applies sha256 to our input */
+                byte[] hash = digest.digest(input.getBytes("UTF-8"));
+                StringBuilder hexString = new StringBuilder();
+                for (byte elem: hash) {
+                    String hex = Integer.toHexString(0xff & elem);
+                    if(hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+                return hexString.toString();
+            }
+            catch(Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+  learner_created: true
+- name: src/blockchain/Blockchain.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.Serializable;
+    import java.util.ArrayList;
+    import java.util.List;
+
+    public class Blockchain implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private int id = 0;
+        private String prevHash;
+        public List<Block> blockStorage = new ArrayList<>();
+        private int N = 0;
+
+        private static List<MessageData> data = new ArrayList<>();
+
+        private long current_unique_id = 0;
+        private static final long max_id = 1000000000;
+
+        public boolean validate(){
+            //reject the messages with identifier less than
+            //the prev identifier in the block
+
+            //check that every message has an identifier greater
+            //than the prev identifier
+            for(int i = id - 1; i >= 1; i--){
+                if(!blockStorage.get(i).getPrevHash().contains(blockStorage.get(i-1).toString())){
+                    return false;
+                }
+                //System.out.println(hashStorage.get(i).getPrevHash() + " " + hashStorage.get(i-1).toString());
+                if(blockStorage.get(i).getData().size() == 1){
+                    if (blockStorage.get(i).getData().get(0).getUnique_id() <=
+                            blockStorage.get(i-1).getData().
+                                    get(blockStorage.get(i-1).getData().size()-1).getUnique_id()){
+                        return false;
+                    }
+                }else if(blockStorage.get(i).getData().size() > 1) {
+                    for (int j = blockStorage.get(i).getData().size() - 1; j >= 1; j--) {
+                        if (blockStorage.get(i).getData().get(j).getUnique_id() <=
+                                blockStorage.get(i).getData().get(j-1).getUnique_id()){
+                            return false;
+                        }
+                    }
+                }
+
+            }
+            return true;
+        }
+
+        @Override
+        public String toString(){
+            String str = "last id: " + id + "\nprevHash: " + prevHash + "\n";
+            str += blockStorage.toString() + "\n";
+            return str;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getPrevHash() {
+            return prevHash;
+        }
+
+        public void setPrevHash(String prevHash) {
+            this.prevHash = prevHash;
+        }
+
+        public void setN(int n) {
+            N = n;
+        }
+
+        public int getN() {
+            return N;
+        }
+
+        public void setData(List<MessageData> data) {
+            //System.out.println("data set to: "+data.toString());
+            Blockchain.data = data; //reset
+        }
+
+        public List<MessageData> getDataList() {
+            //System.out.println(data.toString());
+            return data;
+        }
+
+        public void addData(MessageData data){
+            Blockchain.data.add(data);
+            //System.out.println(this.data.toString());
+        }
+
+        public long getNewUniqueID(){
+            long new_id = (long) (Math.random() * max_id + current_unique_id);
+            current_unique_id = new_id;
+
+            return new_id;
+        }
+    }
+  learner_created: true
+- name: src/blockchain/bc.blockchain
+  visible: true
+  text: "��\0\x05sr\0\x15blockchain.Blockchain\0\0\0\0\0\0\0\x01\x02\0\x05I\0\x01\
+    NJ\0\x11current_unique_idI\0\x02idL\0\fblockStoraget\0\x10Ljava/util/List;L\0\b\
+    prevHasht\0\x12Ljava/lang/String;xp\0\0\0\x05\0\0\0\0\0\0\0\0\0\0\0\nsr\0\x13\
+    java.util.ArrayListx��\x1d��a�\x03\0\x01I\0\x04sizexp\0\0\0\nw\x04\0\0\0\nsr\0\
+    \x10blockchain.Block\0\0\0\0\0\0\0\x01\x02\0\bD\0\bdurationJ\0\bmagicNumJ\0\a\
+    timeEndJ\0\ttimestampL\0\x04dataq\0~\0\x01L\0\x04hashq\0~\0\x02L\0\bprevHashq\0\
+    ~\0\x02L\0\x03strq\0~\0\x02xp?���S���\0\0\0\0\a�\x1a]\0\0\x01z�\x1a�Q\0\0\x01\
+    z�\x1a�6sq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@21218828bd392933ea9e8d19ff94f7c875dda5c4441d46251e8e298ee1e20ee3t\0\
+    \x010t\0\n1625713978935sq\0~\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\b\x1c�b\0\0\x01z�\x1a\
+    �h\0\0\x01z�\x1a�hq\0~\0\bt\0@23a0b5021d9981c79799caff82a551c08eca0ac5f10bf63691b31714780b5816q\0\
+    ~\0\tt\0\n1625713978986sq\0~\0\x06\0\0\0\0\0\0\0\0\0\0\0\04SC�\0\0\x01z�\x1a�\
+    q\0\0\x01z�\x1a�qq\0~\0\bt\0@e2d12aaaeceb2b23ff0500b9a5e029638299124e2b1e85eefd0729dc117b9464q\0\
+    ~\0\nt\0\n1625713978996sq\0~\0\x06\0\0\0\0\0\0\0\0\0\0\0\03\x16fO\0\0\x01z�\x1a\
+    �|\0\0\x01z�\x1a�|sq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@0c806dc5b92acf075f0109acd484f581936a26459d7e423186ec5d4174bc1f98q\0\
+    ~\0\x10t\0\n1625713979008sq\0~\0\x06?�\n=p��\n\0\0\0\0-�)\x1f\0\0\x01z�\x1a��\0\
+    \0\x01z�\x1a��sq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@0001bc39b5ea25db39a520289879ecb979d28688b83b72e8a16bf7fd37d986e1q\0\
+    ~\0\x14t\0\n1625713979022sq\0~\0\x06?`bM���\0\0\0\0 rv�\0\0\x01z�\x1a�g\0\0\x01\
+    z�\x1a�esq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@000a870676dec8ec0a9843cc795a318aa7748e2d932c0a7ac3be56b6c740022dq\0\
+    ~\0\x18t\0\n1625713988971sq\0~\0\x06?�t�j~��\0\0\0\0:+\x1e\n\0\0\x01z�\x1aՕ\0\0\
+    \x01z�\x1a�oq\0~\0\et\0@0000596440f05dec2b1640c7f77ccd7f6229412894acc2f8c621448481c70cf7q\0\
+    ~\0\x1ct\0\n1625713988982sq\0~\0\x06?�\x1c�\b1&�\0\0\0\0\t�\0\e\0\0\x01z�\x1a�\
+    p\0\0\x01z�\x1a�=sq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@0000b8a58695f8921a8df5350eecc7f0fc9e8a42fdcd2d9cedede88f39e8bd2bq\0\
+    ~\0\x1ft\0\n1625713989189sq\0~\0\x06?�(�\x8f\\)\0\0\0\0$\x10�\x02\0\0\x01z�\x1a\
+    �\t\0\0\x01z�\x1a��sq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@000098a3695a1d8a0f9c2f2d798daf7ba52d537bb2eb066932cd6e09145958b9q\0\
+    ~\0#t\0\n1625713989339sq\0~\0\x06?�n��O�;\0\0\0\0\x0e\x0f'`\0\0\x01z�\x1a�&\0\0\
+    \x01z�\x1a�\x1dsq\0~\0\x04\0\0\0\0w\x04\0\0\0\0xt\0@00004bb822a7cc5ad366ecd4d320fac9d8170e2c2df7446728df826a774f85b7q\0\
+    ~\0't\0\n1625713989415xq\0~\0+"
+  learner_created: true
+- name: src/blockchain/Miner.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.IOException;
+    import java.util.ArrayList;
+    import java.util.Collections;
+    import java.util.concurrent.atomic.AtomicBoolean;
+
+    public class Miner extends Thread {
+        private int miner_id;
+        public Miner(int miner_id){
+            this.miner_id = miner_id;
+        }
+        private AtomicBoolean printing = new AtomicBoolean(false);
+        @Override
+        public void run() {
+            //System.out.println("invoked new miner_"+miner_id);
+
+            do{
+                Blockchain blockchain = Main.blockchain;
+                try {
+                    generateBlock(miner_id, blockchain);
+                    //System.out.println(blockchain.validate());
+                    FileSerial.write(Main.blockchain, Main.filename);
+                    Main.blockchain = blockchain;
+
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }while(Main.blockchain.blockStorage.size() < Main.finalSize); //how many blocks you want
+        }
+
+        private void generateBlock(int miner_id, Blockchain blockchain) throws InterruptedException {
+            int blk_id = blockchain.getId() + 1;
+            String prevHash = blockchain.getPrevHash();
+
+            Block blk = new Block(blk_id); //block is already created from here
+
+            if(blockchain.validate()) {
+                startIfAlive();
+                blk.setPrevHash(prevHash);
+                //System.out.println("size: "+blockchain.hashStorage.size() + " current id: " + (blk_id - 1));
+
+                printing = Main.printBlock(blk_id, blk, prevHash, blockchain, printing, miner_id);
+            }else{
+                System.out.println("Invalid Blockchain!!!");
+            }
+        }
+
+        private void startIfAlive(){
+            if(!Main.message.isAlive()){
+                try {
+                    Main.message.start();
+                    //System.out.println("Message Thread Started");
+                }catch(IllegalThreadStateException ignored){}
+            }
+        }
+    }
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/GenerateKeys.java
+  visible: true
+  text: |
+    package blockchain.generateMsgKeys;
+
+    import java.io.File;
+    import java.io.FileOutputStream;
+    import java.io.IOException;
+    import java.security.*;
+
+    public class GenerateKeys {
+        private KeyPairGenerator keyGen;
+        private KeyPair pair;
+        private PrivateKey privateKey;
+        private PublicKey publicKey;
+
+        public GenerateKeys(int keylength) throws NoSuchAlgorithmException, NoSuchProviderException {
+            this.keyGen = KeyPairGenerator.getInstance("RSA");
+            this.keyGen.initialize(keylength);
+        }
+
+        public void createKeys() {
+            this.pair = this.keyGen.generateKeyPair();
+            this.privateKey = pair.getPrivate();
+            this.publicKey = pair.getPublic();
+        }
+
+        public PrivateKey getPrivateKey() {
+            return this.privateKey;
+        }
+
+        public PublicKey getPublicKey() {
+            return this.publicKey;
+        }
+
+        public void writeToFile(String path, byte[] key) throws IOException {
+            File f = new File(path);
+            f.getParentFile().mkdirs();
+
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(key);
+            fos.flush();
+            fos.close();
+        }
+    }
+  learner_created: true
+- name: src/blockchain/FileSerial.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.*;
+    import java.nio.channels.ClosedChannelException;
+    import java.nio.channels.FileChannel;
+    import java.nio.channels.FileLock;
+    import java.nio.channels.OverlappingFileLockException;
+    import java.util.ConcurrentModificationException;
+    import java.util.List;
+    import java.util.concurrent.locks.Lock;
+    import java.util.concurrent.locks.ReadWriteLock;
+    import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+    public class FileSerial {
+        private static ReadWriteLock lock = new ReentrantReadWriteLock();
+        static Lock writelock = lock.writeLock();
+        public static synchronized void write(Object obj, String fileName) throws IOException, InterruptedException {
+
+            try {
+                writelock.lock();
+                FileOutputStream fos = new FileOutputStream(fileName);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(bos);
+                try{oos.writeObject(obj);} catch (ConcurrentModificationException e){
+                    Thread.sleep(10);
+                    oos.writeObject(obj);
+                }
+                //System.out.println(obj.toString());
+                oos.close();
+            }finally {
+                writelock.unlock();
+            }
+        }
+        public static Object read(String fileName) throws IOException, ClassNotFoundException {
+            FileInputStream fis = new FileInputStream(fileName);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            Object obj = ois.readObject();
+            //System.out.println(obj.toString());
+            ois.close();
+            return obj;
+        }
+    }
+  learner_created: true
+- name: src/blockchain/MessageData.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.File;
+    import java.io.Serializable;
+    import java.nio.file.Files;
+    import java.security.*;
+    import java.security.spec.PKCS8EncodedKeySpec;
+    import java.security.spec.X509EncodedKeySpec;
+
+    public class MessageData implements Serializable {
+        private String msgText;
+        private byte[] signature;
+        private long unique_id;
+        private PublicKey public_key;
+
+        public MessageData(String msgText) throws Exception {
+            this.msgText = msgText;
+            unique_id = Main.blockchain.getNewUniqueID();
+
+            signature = sign(msgText+unique_id, "C:\\Users\\wh\\IdeaProjects\\Blockchain1\\" +
+                    "Blockchain\\task\\src\\blockchain\\generateMsgKeys\\privateKey");
+
+            public_key = getPublic("C:\\Users\\wh\\IdeaProjects\\Blockchain1\\" +
+                    "Blockchain\\task\\src\\blockchain\\generateMsgKeys\\publicKey");
+        }
+
+        //The method that signs the data using the private key that is stored in keyFile path
+        private byte[] sign(String data, String keyFile) throws InvalidKeyException, Exception{
+            Signature rsa = Signature.getInstance("SHA1withRSA");
+            rsa.initSign(getPrivate(keyFile));
+            rsa.update(data.getBytes());
+            return rsa.sign();
+        }
+
+        private PrivateKey getPrivate(String filename) throws Exception {
+            byte[] keyBytes = Files.readAllBytes(new File(filename).toPath());
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            return kf.generatePrivate(spec);
+        }
+
+        public boolean verifySignature(byte[] data, byte[] signature, String keyFile) throws Exception {
+            Signature sig = Signature.getInstance("SHA1withRSA");
+            sig.initVerify(getPublic(keyFile));
+            sig.update(data);
+
+            return sig.verify(signature);
+        }
+
+        //Method to retrieve the Public Key from a file
+        private PublicKey getPublic(String filename) throws Exception {
+            byte[] keyBytes = Files.readAllBytes(new File(filename).toPath());
+            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            return kf.generatePublic(spec);
+        }
+
+        @Override
+        public String toString(){
+            return msgText;
+        }
+
+        public long getUnique_id() {
+            return unique_id;
+        }
+    }
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/Run.java
+  visible: true
+  text: |
+    package blockchain.generateMsgKeys;
+
+    import java.io.IOException;
+    import java.security.NoSuchAlgorithmException;
+    import java.security.NoSuchProviderException;
+
+    public class Run {
+        public static void run(String[] args) {
+            GenerateKeys gk;
+            try {
+                gk = new GenerateKeys(1024);
+                gk.createKeys();
+                gk.writeToFile("C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\generateMsgKeys\\publicKey", gk.getPublicKey().getEncoded());
+                gk.writeToFile("C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\generateMsgKeys\\privateKey", gk.getPrivateKey().getEncoded());
+                System.out.println("Success!");
+            } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+                System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+
+        }
+    }
+  learner_created: true
+- name: src/blockchain/Block.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.Serializable;
+    import java.util.Date;
+    import java.util.List;
+    import java.util.Random;
+
+    import static java.lang.Math.random;
+
+    public class Block implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private static Blockchain blockchain = Main.blockchain; //ini blkchn
+        public long timestamp = new Date().getTime();
+        private long timeEnd;
+        public double duration;
+        private String hash = "0";
+        private String prevHash = "";
+        public long magicNum = 0;
+        public static int numOfZeroes; //ini N
+        private List<MessageData> data;
+
+        private String str;
+        public Block(int id) throws InterruptedException {
+            str = id + timestamp + prevHash;
+            if(!str.equals("0")) {
+                do{
+                    magicNum = (long)(random() * 1000000000);
+                    hash = StringUtil.applySha256(str + magicNum);
+                }
+                while(hash.indexOf(createZeroStr()) != 0);
+            }
+
+            //Thread.sleep(3000); //for testing inputs
+            getDataFromList();
+            timeEnd = new Date().getTime();
+            duration = (double)(timeEnd - timestamp)/1000; // in seconds
+        }
+        private String createZeroStr(){
+            String zeroes = "";
+            for(int i = 0; i < numOfZeroes; i++){
+                zeroes += "0";
+            }
+            return zeroes;
+        }
+        @Override
+        public String toString(){
+            return hash;
+        }
+
+        public void setPrevHash(String str) {
+            this.prevHash = str;
+        }
+
+        public String getPrevHash() {
+            return prevHash;
+        }
+
+        private void getDataFromList(){
+            data = blockchain.getDataList();
+        }
+
+         public String getDataString(){
+            if(data.isEmpty()){
+                return "no messages";
+            }
+            String returnVal = "";
+            for(int i = 0; i < data.size(); i++){
+                returnVal += "\n" + data.get(i).toString();
+            }
+            return returnVal;
+         }
+
+         public List<MessageData> getData(){
+            return data;
+         }
+    }
+  learner_created: true
+- name: src/blockchain/Message.java
+  visible: true
+  text: |
+    package blockchain;
+
+    import java.io.BufferedReader;
+    import java.io.IOException;
+    import java.io.InputStreamReader;
+    import java.util.Scanner;
+    import java.util.concurrent.TimeoutException;
+    import java.util.concurrent.atomic.AtomicBoolean;
+    import java.util.logging.Logger;
+
+    public class Message extends Thread{
+        //during search of a block
+        private volatile boolean running = true;
+
+        @Override
+        public void run() {
+            //sends message to blockchain (Main ver)
+            //prefer using id?
+            //Store message into a list until able a new block is created
+            //block can be edited by magic numbers?
+
+            while(running){
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                Blockchain blockchain = Main.blockchain;
+                try {
+                    String str = readLineTimeout(br, 1000);
+                    blockchain.addData(new MessageData(str));
+                } catch (IOException | TimeoutException ignored) { } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void terminate() {
+            running = false;
+        }
+
+        public void restart() {
+            running = true;
+        }
+
+        public String readLineTimeout(BufferedReader reader, long timeout) throws TimeoutException, IOException {
+            long start = System.currentTimeMillis();
+
+            while (!reader.ready()) {
+                if (System.currentTimeMillis() - start >= timeout)
+                    throw new TimeoutException();
+
+                // optional delay between polling
+                try { Thread.sleep(50); } catch (Exception ignore) {}
+            }
+
+            return reader.readLine(); // won't block since reader is ready
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/50/stages/276/implement#comment
 status: Unchecked
 record: -1

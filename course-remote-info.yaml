@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/209941/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Wed, 07 Jul 2021 04:32:06 UTC
+update_date: Wed, 07 Jul 2021 23:49:59 UTC
 stages:
 - id: 271
   step: 5413
@@ -19,12 +19,14 @@ stages:
   is_completed: true
 - id: 275
   step: 5417
-  is_completed: false
+  is_completed: true
 - id: 276
   step: 5418
   is_completed: false
 topics:
   0:
+  - title: Write, compile, and run
+    theory_id: 3739
   - title: JVM, JRE, and JDK
     theory_id: 3499
   - title: Immutability
@@ -97,14 +99,6 @@ topics:
     theory_id: 3507
   - title: Switch statement
     theory_id: 3504
-  - title: Write, compile, and run
-    theory_id: 3739
-  - title: Errors in programs
-    theory_id: 3536
-  - title: What is an exception
-    theory_id: 3497
-  - title: NPE
-    theory_id: 1945
   - title: Sizes and ranges
     theory_id: 3532
   - title: Type casting
@@ -131,10 +125,6 @@ topics:
     theory_id: 3523
   - title: Final variables
     theory_id: 7427
-  - title: Hierarchy of exceptions
-    theory_id: 3570
-  - title: Exception handling
-    theory_id: 3552
   - title: IntelliJ IDEA
     theory_id: 3801
   - title: Algorithms in Java
@@ -143,10 +133,20 @@ topics:
     theory_id: 8977
   - title: Parameters and options
     theory_id: 9746
-  - title: Hash table in Java
-    theory_id: 6945
+  - title: Errors in programs
+    theory_id: 3536
+  - title: What is an exception
+    theory_id: 3497
+  - title: Hierarchy of exceptions
+    theory_id: 3570
+  - title: Exception handling
+    theory_id: 3552
+  - title: NPE
+    theory_id: 1945
   - title: Running programs on your computer
     theory_id: 3746
+  - title: Hash table in Java
+    theory_id: 6945
   - title: LocalDate
     theory_id: 3592
   - title: LocalTime
@@ -191,12 +191,12 @@ topics:
     theory_id: 3622
   - title: Objects
     theory_id: 4727
-  - title: Boxing and unboxing
-    theory_id: 3595
   - title: Static members
     theory_id: 3534
   - title: Hiding and overriding
     theory_id: 3572
+  - title: Boxing and unboxing
+    theory_id: 3595
   1:
   - title: The concept of patterns
     theory_id: 3611
@@ -286,14 +286,16 @@ topics:
     theory_id: 3581
   - title: The Set interface
     theory_id: 3575
-  - title: Comparator
-    theory_id: 12966
+  - title: The Map interface
+    theory_id: 3558
   - title: Standard functional interfaces
     theory_id: 3623
   - title: Function composition
     theory_id: 3580
   - title: Optional
     theory_id: 9699
+  - title: Comparator
+    theory_id: 12966
   - title: Functional data processing with streams
     theory_id: 3582
   - title: Stream filtering
@@ -314,8 +316,6 @@ topics:
     theory_id: 3612
   - title: Parallel streams
     theory_id: 8419
-  - title: The Map interface
-    theory_id: 3558
   - title: Grouping collectors
     theory_id: 10512
   4:

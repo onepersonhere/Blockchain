@@ -24,8 +24,10 @@ public class Message extends Thread{
             Blockchain blockchain = Main.blockchain;
             try {
                 String str = readLineTimeout(br, 1000);
-                blockchain.addData(str);
-            } catch (IOException | TimeoutException ignored) { }
+                blockchain.addData(new MessageData(str));
+            } catch (IOException | TimeoutException ignored) { } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

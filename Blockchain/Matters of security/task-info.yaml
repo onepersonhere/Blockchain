@@ -619,6 +619,24 @@ files:
         }
     }
   learner_created: true
+- name: src/blockchain/MessageData.java
+  visible: true
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/GenerateKeys.java
+  visible: true
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/privateKey
+  visible: true
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/publicKey
+  visible: true
+  learner_created: true
+- name: src/blockchain/generateMsgKeys/Run.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/50/stages/275/implement#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 08 Jul 2021 03:13:19 UTC
+record: 5

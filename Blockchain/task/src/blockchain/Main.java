@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         blockchain = Main.ifFileEmpty(blockchain); //create/load blockchain
         iniID = blockchain.getId();
-        size = blockchain.hashStorage.size();
+        size = blockchain.blockStorage.size();
         finalSize = size + 5; //how many blocks you want
 
         Block.numOfZeroes = blockchain.getN(); //set N value
@@ -28,7 +28,7 @@ public class Main {
             miner.setName("miner_" + (i + 1));
             miner.start();
         }
-        Thread.sleep(5000); //prevent main from exiting while other threads are running...
+        Thread.sleep(10000); //prevent main from exiting while other threads are running...
 
     }
 
@@ -53,10 +53,10 @@ public class Main {
     public static synchronized AtomicBoolean printBlock(int blk_id, Block blk, String prevHash, Blockchain blockchain,
                                                  AtomicBoolean printing, int miner_id) throws InterruptedException {
         if(!printing.get()) { //not true
-            if (blockchain.hashStorage.size() <= blk_id - 1) {
+            if (blockchain.blockStorage.size() <= blk_id - 1) {
                 printing.set(true);
                 blockchain.setPrevHash(blk.toString());
-                blockchain.hashStorage.add(blk);
+                blockchain.blockStorage.add(blk);
                 blockchain.setId(blk_id);
 
                 //System.out.println("id is "+blockchain.getId());
@@ -70,7 +70,7 @@ public class Main {
                 System.out.println("Hash of the previous block: \n" + prevHash);
                 System.out.println("Hash of the block: \n" + blk);
 
-                System.out.println("Block data: "+blk.getData());
+                System.out.println("Block data: "+blk.getDataString());
                 clearData(blockchain);
                 stopDataCollection();
                 //Block Data?
@@ -104,8 +104,8 @@ public class Main {
         }
     }
     private static void stopDataCollection(){
-        if(Main.blockchain.hashStorage.size() == Main.finalSize - 1) {
-            System.out.println("Message terminated");
+        if(Main.blockchain.blockStorage.size() == Main.finalSize) {
+            //System.out.println("Message terminated");
             Main.message.terminate();
         }
     }

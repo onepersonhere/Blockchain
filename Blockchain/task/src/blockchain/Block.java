@@ -18,7 +18,7 @@ public class Block implements Serializable {
     private String prevHash = "";
     public long magicNum = 0;
     public static int numOfZeroes; //ini N
-    private String data;
+    private List<MessageData> data;
 
     private String str;
     public Block(int id) throws InterruptedException {
@@ -31,8 +31,8 @@ public class Block implements Serializable {
             while(hash.indexOf(createZeroStr()) != 0);
         }
 
-        //Thread.sleep(1000); //for testing inputs
-        data = getdata();
+        //Thread.sleep(3000); //for testing inputs
+        getDataFromList();
         timeEnd = new Date().getTime();
         duration = (double)(timeEnd - timestamp)/1000; // in seconds
     }
@@ -56,20 +56,22 @@ public class Block implements Serializable {
         return prevHash;
     }
 
-    private String getdata(){
-        List<String> list = blockchain.getData();
-
-        String returnVal = "";
-        for(int i = 0; i < list.size(); i++){
-            returnVal += "\n" + list.get(i);
-        }
-        return returnVal;
+    private void getDataFromList(){
+        data = blockchain.getDataList();
     }
 
-     public String getData(){
+     public String getDataString(){
         if(data.isEmpty()){
             return "no messages";
         }
+        String returnVal = "";
+        for(int i = 0; i < data.size(); i++){
+            returnVal += "\n" + data.get(i).toString();
+        }
+        return returnVal;
+     }
+
+     public List<MessageData> getData(){
         return data;
      }
 }
