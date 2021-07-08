@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
+//test
 public class Main {
     public static Blockchain blockchain = new Blockchain();
     public static int size;
