@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Miner extends Thread {
     private int miner_id;
+    private int current_VC = 100; //initial
     public Miner(int miner_id){
         this.miner_id = miner_id;
     }
@@ -33,9 +34,10 @@ public class Miner extends Thread {
         int blk_id = blockchain.getId() + 1;
         String prevHash = blockchain.getPrevHash();
 
-        Block blk = new Block(blk_id); //block is already created from here
+        Block blk = new Block(blk_id,miner_id); //block is already created from here
 
         if(blockchain.validate()) {
+            current_VC += 100;
             startIfAlive();
             blk.setPrevHash(prevHash);
             //System.out.println("size: "+blockchain.hashStorage.size() + " current id: " + (blk_id - 1));
@@ -53,5 +55,9 @@ public class Miner extends Thread {
                 //System.out.println("Message Thread Started");
             }catch(IllegalThreadStateException ignored){}
         }
+    }
+
+    public int getCurrent_VC() {
+        return current_VC;
     }
 }

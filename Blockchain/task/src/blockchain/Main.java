@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
-//test
+
 public class Main {
     public static Blockchain blockchain = new Blockchain();
     public static int size;
@@ -12,13 +12,22 @@ public class Main {
     public static final String filename = "C:\\Users\\wh\\IdeaProjects\\Blockchain1\\Blockchain\\task\\src\\blockchain\\bc.blockchain";
     public static Message message = new Message();
     public static int iniID;
+    private static final int NUM_OF_BLOCKS = 15;
 
-    //while creating one block, message receive will be stored into the next block
+    //start with 100 vc
+    //miner adds miner_id into blockchain???
+    //blocks store info about miner who created the block
+
+    //to check amt of vc a person have:
+    //check all of his transactions and all of the transactions to him
+    //reject transaction if person tries to spend more money than he has.
+    //method to return amount of coins a person has.
+
     public static void main(String[] args) throws InterruptedException {
         blockchain = Main.ifFileEmpty(blockchain); //create/load blockchain
         iniID = blockchain.getId();
         size = blockchain.blockStorage.size();
-        finalSize = size + 5; //how many blocks you want
+        finalSize = size + NUM_OF_BLOCKS; //how many blocks you want
 
         Block.numOfZeroes = blockchain.getN(); //set N value
          //only 1 instance of system.in
@@ -28,8 +37,8 @@ public class Main {
             miner.setName("miner_" + (i + 1));
             miner.start();
         }
-        Thread.sleep(10000); //prevent main from exiting while other threads are running...
 
+        Thread.sleep(12000); //prevent main from exiting while other threads are running...
     }
 
     public static Blockchain ifFileEmpty(Blockchain blockchain){
@@ -62,7 +71,8 @@ public class Main {
                 //System.out.println("id is "+blockchain.getId());
 
                 System.out.println("Block:");
-                System.out.println("Created by miner # " + miner_id);
+                System.out.println("Created by: miner # " + miner_id);
+                System.out.println("miner #"+miner_id+" gets 100 VC");
                 //factors affecting the hash value
                 System.out.println("Id: " + blk_id);
                 System.out.println("Timestamp: " + blk.timestamp);

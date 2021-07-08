@@ -19,9 +19,11 @@ public class Block implements Serializable {
     public long magicNum = 0;
     public static int numOfZeroes; //ini N
     private List<MessageData> data;
+    private int miner_id;
 
     private String str;
-    public Block(int id) throws InterruptedException {
+    public Block(int id, int miner_id) throws InterruptedException {
+        this.miner_id = miner_id;
         str = id + timestamp + prevHash;
         if(!str.equals("0")) {
             do{
@@ -62,7 +64,7 @@ public class Block implements Serializable {
 
      public String getDataString(){
         if(data.isEmpty()){
-            return "no messages";
+            return "\nNo transactions";
         }
         String returnVal = "";
         for(int i = 0; i < data.size(); i++){
